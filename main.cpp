@@ -4,18 +4,19 @@
 
 int main()
 {
+	setlocale(LC_ALL, "Russian");
 	CityGraph* graph = new CityGraph();
-	graph->AddCity("Novosibirsk");
-	graph->AddCity("Amongus");
-	graph->AddCity("SkibidiDopDop");
-	graph->AddCity("YesYes");
-	graph->AddCity("Ben");
+	graph->AddCity("A");
+	graph->AddCity("B");
+	graph->AddCity("C");
+	graph->AddCity("D");
+	graph->AddCity("E");
 
-	graph->AddPath("Novosibirsk", "SkibidiDopDop", 51);
-	graph->AddPath("SkibidiDopDop", "Ben", 17);
-	graph->AddPath("Ben", "Amongus", 17);
-	graph->AddPath("Nobosibirsk", "Ben", 17);
+	graph->AddPath("A", "C", 51);
+	graph->AddPath("C", "E", 20);
+	graph->AddPath("E", "B", 5);
+	graph->AddPath("A", "E", 1);
 
-	graph->PrintAllPaths("Novosibirsk", "Amongus");
+	graph->PrintAllPaths("A", "E");
 }
 

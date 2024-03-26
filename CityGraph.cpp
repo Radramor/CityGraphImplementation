@@ -77,46 +77,49 @@ void CityGraph::PrintAllPaths(const std::string sourceName, const std::string de
 	if (destination == nullptr) return;
 
 	vec.clear();
+	std::cout << "Все пути из " << sourceName << " в " << destName << ":" << std::endl;
+	
 	sum = 0;
 	CheckCity(source, destination);
-
-	for (CityNode* i : vec)
-	{
-		std::cout << i->name << " ";
-	}
+	// переставить
 }
 
-bool CityGraph::CheckCity(CityNode* node, CityNode* destNode) const
+void CityGraph::CheckCity(CityNode* node, CityNode* destNode) const
 {
 	if (node == nullptr)
-		return false;
+		return;
 
 	if (node == destNode)
-		return true;
-
+	{	
+		std::cout << node->name << std::endl;
+		std::cout << "Общая протяженность дороги: " << sum << std::endl << std::endl;
+		return;
+	}
 	vec.push_back(node);
+	std::cout << node->name << " -> ";
 	CheckPath(node->pathHead, destNode);
+	vec.pop_back();
 }
 
-bool CityGraph::CheckPath(PathNode* path, CityNode* destNode) const
+void CityGraph::CheckPath(PathNode* path, CityNode* destNode) const
 {
+
 	if (path == nullptr) {
-		return false;
+		return;
 	}
 	
 	if (path->city == nullptr) {
-		return false;
+		return;
 	}
 
-	if (std::find(vec.begin(), vec.end(), path->city) != vec.end()) {
-		return false;
+	auto passed{ std::find(vec.begin(), vec.end(), path->city) };
+	if (passed != vec.end() && path->nextPath == nullptr) {
+		return;
 	}
 
-	if (path->city == destNode) {
-		return true;
-	}
-	
 	CheckPath(path->nextPath, destNode);
 	sum += path->GetLength();
 	CheckCity(path->city, destNode);
+	sum -= path->GetLength();
+	
 }

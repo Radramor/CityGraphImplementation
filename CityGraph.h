@@ -7,8 +7,8 @@ class CityGraph {
 private:
 	CityNode* head;
 	CityNode* FindNode(CityNode* node, const std::string name) const;
-	bool CheckCity(CityNode* node, CityNode* destNode) const;
-	bool CheckPath(PathNode* path, CityNode* destNode) const;
+	void CheckCity(CityNode* node, CityNode* destNode) const;
+	void CheckPath(PathNode* path, CityNode* destNode) const;
 public:
 	CityGraph();
 	~CityGraph();
