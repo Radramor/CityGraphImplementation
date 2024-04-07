@@ -9,8 +9,6 @@ PathNode::PathNode(CityNode* city, int length)
 
 PathNode::~PathNode()
 {
-	delete city;
-	delete nextPath;
 }
 
 int PathNode::GetLength()

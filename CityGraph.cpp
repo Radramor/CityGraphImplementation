@@ -67,59 +67,55 @@ void CityGraph::PrintNode(const CityNode * cityNode) const
 	PrintNode(cityNode->nextCity);
 }
 
-std::vector<CityNode*> vec;
-int sum = 0;
-void CityGraph::PrintAllPaths(const std::string sourceName, const std::string destName) const
+void CityGraph::PrintAllPathsBetweenCities(const std::string& sourceName, const std::string& destName) const
 {
 	CityNode* source = GetCity(sourceName);
-	if (source == nullptr) return;
-	CityNode* destination = GetCity(destName);
-	if (destination == nullptr) return;
+	if (source == nullptr) {
+		std::cout << "√ород-источник не найден" << std::endl;
+		return;
+	}
 
-	vec.clear();
+	CityNode* dest = GetCity(destName);
+	if (dest == nullptr) {
+		std::cout << "√ород назначени€ не найден" << std::endl;
+		return;
+	}
+
+	std::vector<std::string> visited;
+	int totalLength = 0;
 	std::cout << "¬се пути из " << sourceName << " в " << destName << ":" << std::endl;
-	
-	sum = 0;
-	CheckCity(source, destination);
-	// переставить
+	source->PrintPath(destName, visited, totalLength);
 }
-
-void CityGraph::CheckCity(CityNode* node, CityNode* destNode) const
+void CityGraph::RemoveCity(const std::string& name, CityGraph *graph)
 {
-	if (node == nullptr)
-		return;
+	if (head == nullptr) return; // граф пуст
 
-	if (node == destNode)
-	{	
-		std::cout << node->name << std::endl;
-		std::cout << "ќбща€ прот€женность дороги: " << sum << std::endl << std::endl;
-		return;
-	}
-	vec.push_back(node);
-	std::cout << node->name << " -> ";
-	CheckPath(node->pathHead, destNode);
-	vec.pop_back();
-}
-
-void CityGraph::CheckPath(PathNode* path, CityNode* destNode) const
-{
-
-	if (path == nullptr) {
-		return;
-	}
-	
-	if (path->city == nullptr) {
+	// если нужно удалить головной узел
+	if (head->name == name) {
+		CityNode* temp = head;
+		head = head->nextCity;
+		delete temp;
 		return;
 	}
 
-	auto passed{ std::find(vec.begin(), vec.end(), path->city) };
-	if (passed != vec.end() && path->nextPath == nullptr) {
-		return;
+	// найти узел, предшествующий удал€емому
+	CityNode* prev = nullptr;
+	CityNode* current = head;
+	while (current != nullptr && current->name != name) {
+		prev = current;
+		current = current->nextCity;
 	}
 
-	CheckPath(path->nextPath, destNode);
-	sum += path->GetLength();
-	CheckCity(path->city, destNode);
-	sum -= path->GetLength();
-	
+	// если город не найден
+	if (current == nullptr) return;
+
+	// удалить узел
+	prev->nextCity = current->nextCity;
+
+	// удаление всех дорог к этому городу из остальных городов
+	CityNode* everyCity = graph->head;
+	for (everyCity; everyCity->nextCity != nullptr; everyCity = everyCity->nextCity)
+		everyCity->RemovePath(current->name);
+
+	delete current;
 }

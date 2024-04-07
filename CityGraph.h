@@ -16,8 +16,9 @@ public:
 	void AddCity(const std::string name);
 	void AddPath(const std::string sourceName, const std::string destName, int length);
 	
+	void PrintAllPathsBetweenCities(const std::string& sourceName, const std::string& destName) const;
+	void RemoveCity(const std::string& name, CityGraph* graph);
 	CityNode* GetCity(const std::string name) const;
 	void PrintCities() const;
 	void PrintNode(const CityNode* cityNode) const;
-	void PrintAllPaths(const std::string sourceName, const std::string destName) const;
 };
